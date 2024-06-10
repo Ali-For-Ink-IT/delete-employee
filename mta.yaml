@@ -1,0 +1,49 @@
+ID: my-employeeprofile-cap-app
+_schema-version: "3.1"
+version: 1.0.0
+
+modules:
+  - name: srv
+    type: nodejs
+    path: srv
+    parameters:
+      memory: 256M
+    provides:
+      - name: srv-api
+        properties:
+          url: ${default-url}
+    requires:
+      - name: srv-destination
+
+  - name: app
+    type: html5
+    path: app
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:ui
+    requires:
+      - name: srv-api
+        properties:
+          url: ${srv-api/url}
+      - name: html5-apps-repo
+
+resources:
+  - name: srv-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+
+  - name: html5-apps-repo
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+
+  - name: destination-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite

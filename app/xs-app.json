@@ -1,0 +1,9 @@
+{
+  "routes": [
+    {
+      "source": "^/catalog/(.*)$",
+      "destination": "srv-api",
+      "csrfProtection": false
+    }
+  ]
+}
